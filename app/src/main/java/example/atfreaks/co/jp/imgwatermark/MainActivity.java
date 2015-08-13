@@ -49,7 +49,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        File imgFile = new  File(storagePath + "test2.jpg");
+        File imgFile = new File(storagePath + "test2.jpg");
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
 
         bm = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-        if (imgFile.exists()){
+        if (imgFile.exists()) {
             mImageView.setImageBitmap(bm); // Load image into ImageView
         } else {
             Toast.makeText(this, "downloading and creating watermark...", Toast.LENGTH_LONG);
@@ -92,7 +92,14 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void drawRectangleAtBottom(int fillHeight, int imageWidth, int imageHeight, Canvas canvas){
+    /**
+     *
+     * @param fillHeight => height of the rectangle
+     * @param imageWidth => width of the image to be filled
+     * @param imageHeight => height of the image to be filled
+     * @param canvas => the canvas which the rectangle will be used
+     */
+    public static void drawRectangleAtBottom(int fillHeight, int imageWidth, int imageHeight, Canvas canvas) {
 
         Paint rectangle = new Paint(Paint.ANTI_ALIAS_FLAG);
         rectangle.setStrokeWidth(2);
@@ -107,20 +114,20 @@ public class MainActivity extends ActionBarActivity {
         Point point3_draw = new Point();
         Point point4_draw = new Point();
 
-        point1_draw.set(imageWidth,imageHeight);
-        point2_draw.set(0,imageHeight);
-        point3_draw.set(0,imageHeight - fillHeight);
-        point4_draw.set(imageWidth,imageHeight - fillHeight);
+        point1_draw.set(imageWidth, imageHeight);
+        point2_draw.set(0, imageHeight);
+        point3_draw.set(0, imageHeight - fillHeight);
+        point4_draw.set(imageWidth, imageHeight - fillHeight);
 
         Path path = new Path();
         path.setFillType(Path.FillType.EVEN_ODD);
 
         //drawing
-        path.moveTo(point1_draw.x,point1_draw.y);
-        path.lineTo(point2_draw.x,point2_draw.y);
-        path.lineTo(point3_draw.x,point3_draw.y);
-        path.lineTo(point4_draw.x,point4_draw.y);
-        path.lineTo(point1_draw.x,point1_draw.y);
+        path.moveTo(point1_draw.x, point1_draw.y);
+        path.lineTo(point2_draw.x, point2_draw.y);
+        path.lineTo(point3_draw.x, point3_draw.y);
+        path.lineTo(point4_draw.x, point4_draw.y);
+        path.lineTo(point1_draw.x, point1_draw.y);
         path.close();
 
         //drawRectangle
@@ -130,16 +137,16 @@ public class MainActivity extends ActionBarActivity {
     /**
      * description: Creates a watermark to every bitmap given.
      *
-     * @param src (source photo or the main photo this will be the image to be stamped on)
-     * @param profile (the profile photo of the uploader, or any secondary image that will be stamped on the src photo)
+     * @param src       (source photo or the main photo this will be the image to be stamped on)
+     * @param profile   (the profile photo of the uploader, or any secondary image that will be stamped on the src photo)
      * @param watermark (watermark text)
-     * @param location (the point to where to put the text)
-     * @param alpha (transparency of the watermark)
-     * @param size (size of the text on the watermark)
+     * @param location  (the point to where to put the text)
+     * @param alpha     (transparency of the watermark)
+     * @param size      (size of the text on the watermark)
      * @param underline (do you want the text to be underlined? true or false)
      * @return
      */
-    public static Bitmap mark(Bitmap src,Bitmap profile, String watermark, Point location, int alpha, int size, boolean underline) {
+    public static Bitmap mark(Bitmap src, Bitmap profile, String watermark, Point location, int alpha, int size, boolean underline) {
         int w = src.getWidth();
         int h = src.getHeight();
         int fill_height = 80;
@@ -170,25 +177,25 @@ public class MainActivity extends ActionBarActivity {
         //resizing the profile photo
         int profWidth = 150;
         int profHeight = 150;
-        float scaleWidth = ((float) secondaryPicWidth) /profile.getWidth();
+        float scaleWidth = ((float) secondaryPicWidth) / profile.getWidth();
         float scaleHeight = ((float) secondaryPicHeight) / profile.getHeight();
         // CREATE A MATRIX FOR THE MANIPULATION
         Matrix matrix = new Matrix();
         // RESIZE THE BIT MAP
-        Log.i("DownloadEx","scaleX:" + scaleWidth);
-        Log.i("DownloadEx","scaleY:" + scaleHeight);
-        matrix.postScale(scaleWidth,scaleHeight);
+        Log.i("DownloadEx", "scaleX:" + scaleWidth);
+        Log.i("DownloadEx", "scaleY:" + scaleHeight);
+        matrix.postScale(scaleWidth, scaleHeight);
 
         Bitmap resizedBitmap = Bitmap.createBitmap(profile, 0, 0, profWidth, profHeight,
                 matrix, false);
 
         //draw Rectangle at the bottom
-        drawRectangleAtBottom(fill_height,w,h,canvas);
+        drawRectangleAtBottom(fill_height, w, h, canvas);
         //to know what position our text would be lets multiply the prof width to its scaling and add the margin in this case margin is 20
-        txtPosition = (float)(profWidth * scaleWidth) + 20;
-        canvas.drawText(watermark, txtPosition  , (h- fill_height) + 30, paint);
-        canvas.drawText("Wonderful place", txtPosition , (h- fill_height) + 60, paint);
-        canvas.drawBitmap(resizedBitmap, 10, (h- fill_height)+5, prof);
+        txtPosition = (float) (profWidth * scaleWidth) + 20;
+        canvas.drawText(watermark, txtPosition, (h - fill_height) + 30, paint);
+        canvas.drawText("Wonderful place", txtPosition, (h - fill_height) + 60, paint);
+        canvas.drawBitmap(resizedBitmap, 10, (h - fill_height) + 5, prof);
 
         mImageView.setImageBitmap(result);
         mAfterTxt.setText("Image after the watermark");
@@ -212,9 +219,9 @@ public class MainActivity extends ActionBarActivity {
                 bitmaps.add(bm);
                 bitmaps.add(bm2);
 
-                return  bitmaps;
+                return bitmaps;
             } catch (Exception e) {
-                Log.i("DownloadEx",e.getMessage());
+                Log.i("DownloadEx", e.getMessage());
                 this.exception = e;
                 return null;
             }
@@ -223,14 +230,14 @@ public class MainActivity extends ActionBarActivity {
         protected void onPostExecute(List<Bitmap> bitmaps) {
             // TODO: check this.exception
             // TODO: do something with the bm
-            try{
+            try {
 
                 OutputStream fOut = null;
-                File file = new File(storagePath, "test2"+".jpg"); // the File to save to
+                File file = new File(storagePath, "test2" + ".jpg"); // the File to save to
                 fOut = new FileOutputStream(file);
 
                 //load to imageview
-                ImageView mImageViewBefore = (ImageView) findViewById(R.id.imageViewBefore)  ;
+                ImageView mImageViewBefore = (ImageView) findViewById(R.id.imageViewBefore);
                 mImageViewBefore.setImageBitmap(bm);
 
                 mBeforeTxt.setText("Image Before the watermark");
@@ -240,25 +247,24 @@ public class MainActivity extends ActionBarActivity {
                 fOut.flush();
                 fOut.close(); // do not forget to close the stream
 
-                String path = MediaStore.Images.Media.insertImage(getContentResolver(),file.getAbsolutePath(),file.getName(),file.getName());
-                Log.i("DownloadEx",path);
-                Toast.makeText(getApplicationContext(), "done", Toast.LENGTH_LONG);
-                Point a = new Point(100,25);
+                String path = MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+                Log.i("DownloadEx", path);
+                Point a = new Point(100, 25);
                 Bitmap bm_watermark;
 
                 bm_watermark = mark(bm, bm2, "@emilenriquez", a, 100, 20, true);
                 OutputStream fOut2 = null;
-                File file2 = new File(storagePath, "test2"+".jpg"); // the File to save to
+                File file2 = new File(storagePath, "test2" + ".jpg"); // the File to save to
                 fOut2 = new FileOutputStream(file);
 
                 bm_watermark.compress(Bitmap.CompressFormat.JPEG, 100, fOut2); // saving the Bitmap to a file compressed as a JPEG with 100% compression rate
-                String path2 = MediaStore.Images.Media.insertImage(getContentResolver(),file2.getAbsolutePath(),"watermark","watermark");
+                String path2 = MediaStore.Images.Media.insertImage(getContentResolver(), file2.getAbsolutePath(), "watermark", "watermark");
                 fOut2.flush();
                 fOut2.close(); // do not forget to close the stream
 
 
-            } catch (Exception e){
-                Log.i("DownloadEx",e.getMessage());
+            } catch (Exception e) {
+                Log.i("DownloadEx", e.getMessage());
 
             }
 
@@ -278,32 +284,8 @@ public class MainActivity extends ActionBarActivity {
             return myBitmap;
         } catch (IOException e) {
             e.printStackTrace();
-            Log.e("DownloadEx",e.getMessage());
+            Log.e("DownloadEx", e.getMessage());
             return null;
         }
-    }
-
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height,
-                matrix, false);
-
-        return resizedBitmap;
-    }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
     }
 }
